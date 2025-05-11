@@ -5,49 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seu Site (Modelo Canal do Saullo)</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <header>
         <div class="container">
+            <div class="logo">
+                <a href="#">SEU LOGO</a>
+            </div>
             <nav>
                 <ul>
                     <li><a href="#">VÍDEOS</a></li>
-                    <li><a href="#">LIVE</a></li>
+                    <li><a href="#">LIVE <span class="live-indicator"></span></a></li>
                     <li><a href="#">EXTENSÃO</a></li>
-                    <li><a href="#">SORTEIOS</a></li>
+                    <li><a href="#">SORTEIOS <span class="badge">NOVO</span></a></li>
                     <li><a href="#">CSGONET</a></li>
                     <li><a href="#">SORTEIOS Insane</a></li>
-                    <li><a href="#">LOGIN</a></li>
+                    <li class="login-btn"><a href="#">LOGIN</a></li>
                 </ul>
             </nav>
+            <div class="mobile-menu-icon">
+                <i class="fas fa-bars"></i>
+            </div>
         </div>
     </header>
 
     <main>
         <section id="sorteios-destaque" class="container">
             <h2>SORTEIOS DIÁRIOS DE ITENS DE CS:GO!</h2>
-            <p>Participe e concorra a diversos prêmios!</p>
-            </section>
+            <p>Participe e concorra a diversos prêmios incríveis.</p>
+            <div class="sorteio-banner">
+                <img src="placeholder-banner-sorteio.jpg" alt="Banner do Sorteio">
+                <a href="#" class="button">PARTICIPAR AGORA!</a>
+            </div>
+        </section>
 
         <section id="videos" class="container">
             <h2>ÚLTIMOS VÍDEOS</h2>
             <div class="videos-grid">
                 <div class="video-item">
-                    <img src="placeholder-video.jpg" alt="Vídeo 1">
-                    <h3>Título do Vídeo 1</h3>
+                    <a href="#">
+                        <img src="placeholder-video-1.jpg" alt="Vídeo 1">
+                        <h3>Título do Vídeo 1</h3>
+                        <span class="video-duration">10:30</span>
+                    </a>
                 </div>
                 <div class="video-item">
-                    <img src="placeholder-video.jpg" alt="Vídeo 2">
-                    <h3>Título do Vídeo 2</h3>
+                    <a href="#">
+                        <img src="placeholder-video-2.jpg" alt="Vídeo 2">
+                        <h3>Título do Vídeo 2</h3>
+                        <span class="video-duration">15:45</span>
+                    </a>
+                </div>
+                <div class="video-item">
+                    <a href="#">
+                        <img src="placeholder-video-3.jpg" alt="Vídeo 3">
+                        <h3>Título do Vídeo 3</h3>
+                        <span class="video-duration">08:20</span>
+                    </a>
                 </div>
                 </div>
+            <div class="ver-mais">
+                <a href="#" class="button">VER MAIS VÍDEOS</a>
+            </div>
         </section>
 
         <section id="links-uteis" class="container">
             <h2>LINKS ÚTEIS</h2>
             <ul>
-                <li><a href="#">CSGO.NET</a></li>
-                <li><a href="#">PROFIT HELPER (Extensão)</a></li>
+                <li><a href="#">CSGO.NET <i class="fas fa-external-link-alt"></i></a></li>
+                <li><a href="#">PROFIT HELPER (Extensão) <i class="fas fa-download"></i></a></li>
+                <li><a href="#">Comunidade Discord <i class="fab fa-discord"></i></a></li>
             </ul>
         </section>
     </main>
@@ -55,8 +83,9 @@
     <footer>
         <div class="container">
             <div class="social-links">
-                <a href="#" target="_blank">Twitter</a>
-                <a href="#" target="_blank">Instagram</a>
+                <a href="#" target="_blank"><i class="fab fa-twitter"></i> Twitter</a>
+                <a href="#" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+                <a href="#" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
             </div>
             <p>&copy; 2025 Seu Site. Todos os direitos reservados.</p>
         </div>
