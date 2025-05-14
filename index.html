@@ -1,96 +1,456 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seu Site (Modelo Canal do Saullo)</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>FomyCup - Sorteios de Skins CS:GO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f0f13;
+            color: #e2e2e2;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: #1e1e2e;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            max-width: 600px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: #aaa;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: #fff;
+        }
+        
+        .giveaway-card {
+            transition: all 0.3s ease;
+            transform: scale(1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .giveaway-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .twitch-purple {
+            background-color: #9147ff;
+        }
+        
+        .twitch-purple:hover {
+            background-color: #772ce8;
+        }
+        
+        .csgo-orange {
+            background-color: #f7941d;
+        }
+        
+        .csgo-orange:hover {
+            background-color: #e67e22;
+        }
+        
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .file-upload input {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            padding: 0;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            filter: alpha(opacity=0);
+        }
+    </style>
 </head>
-<body>
-    <header>
-        <div class="container">
-            <div class="logo">
-                <a href="#">SEU LOGO</a>
+<body class="min-h-screen">
+    <!-- Navbar -->
+    <nav class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <img src="https://via.placeholder.com/40" alt="Logo" class="h-10 w-10 rounded-full">
+                    <span class="text-xl font-bold">FomyCup</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="index.html" class="hover:text-purple-300 transition">Home</a>
+                    <a href="shop.html" class="hover:text-purple-300 transition">Loja</a>
+                    <a href="giveaways.html" class="text-purple-300 font-medium transition">Sorteios</a>
+                    <a href="how-it-works.html" class="hover:text-purple-300 transition">Como Funciona</a>
+                </div>
+                <div id="login-button" class="flex items-center">
+                    <button onclick="twitchLogin()" class="twitch-purple hover:bg-purple-700 text-white px-4 py-2 rounded-md flex items-center space-x-2 transition">
+                        <i class="fab fa-twitch"></i>
+                        <span>Login com Twitch</span>
+                    </button>
+                </div>
+                <div id="user-profile" class="hidden items-center space-x-3">
+                    <img id="user-avatar" src="" alt="User Avatar" class="h-10 w-10 rounded-full">
+                    <span id="username" class="font-medium"></span>
+                    <span id="user-points" class="bg-purple-600 px-2 py-1 rounded-md text-sm"></span>
+                    <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm transition">
+                        Sair
+                    </button>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
             </div>
-            <nav>
-                <ul>
-                    <li><a href="#">VÍDEOS</a></li>
-                    <li><a href="#">LIVE <span class="live-indicator"></span></a></li>
-                    <li><a href="#">EXTENSÃO</a></li>
-                    <li><a href="#">SORTEIOS <span class="badge">NOVO</span></a></li>
-                    <li><a href="#">CSGONET</a></li>
-                    <li><a href="#">SORTEIOS Insane</a></li>
-                    <li class="login-btn"><a href="#">LOGIN</a></li>
-                </ul>
-            </nav>
-            <div class="mobile-menu-icon">
-                <i class="fas fa-bars"></i>
+            <div id="mobile-menu" class="md:hidden hidden mt-2 pb-2">
+                <a href="index.html" class="block py-1 hover:text-purple-300 transition">Home</a>
+                <a href="shop.html" class="block py-1 hover:text-purple-300 transition">Loja</a>
+                <a href="giveaways.html" class="block py-1 text-purple-300 font-medium transition">Sorteios</a>
+                <a href="how-it-works.html" class="block py-1 hover:text-purple-300 transition">Como Funciona</a>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <main>
-        <section id="sorteios-destaque" class="container">
-            <h2>SORTEIOS DIÁRIOS DE ITENS DE CS:GO!</h2>
-            <p>Participe e concorra a diversos prêmios incríveis.</p>
-            <div class="sorteio-banner">
-                <img src="placeholder-banner-sorteio.jpg" alt="Banner do Sorteio">
-                <a href="#" class="button">PARTICIPAR AGORA!</a>
+    <!-- Giveaways Page Content -->
+    <main class="py-12">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl font-bold mb-8 text-center">Sorteios de Skins CS:GO</h1>
+            <p class="text-xl text-center mb-12 max-w-3xl mx-auto">Participe dos nossos sorteios exclusivos e tenha a chance de ganhar skins incríveis de CS:GO!</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <!-- Standard Giveaway Card -->
+                <div class="giveaway-card bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                    <div class="relative">
+                        <img src="https://via.placeholder.com/600x300" alt="Sorteio Padrão" class="w-full h-48 object-cover">
+                        <div class="absolute top-0 left-0 bg-purple-600 text-white px-4 py-1 rounded-br-lg">
+                            <span class="font-bold">GRÁTIS</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h2 class="text-2xl font-bold mb-2">Sorteio Padrão</h2>
+                        <p class="text-gray-400 mb-4">Participe gratuitamente deste sorteio e concorra a skins aleatórias de CS:GO.</p>
+                        <div class="flex items-center text-sm text-gray-400 mb-4">
+                            <i class="fas fa-gift text-yellow-400 mr-2"></i>
+                            <span>Prêmio: Skin aleatória de CS:GO</span>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-400 mb-6">
+                            <i class="fas fa-users text-blue-400 mr-2"></i>
+                            <span>Participantes: 1,234</span>
+                        </div>
+                        <button onclick="openGiveawayModal('standard')" class="w-full twitch-purple hover:bg-purple-700 text-white py-3 rounded-md font-medium transition">
+                            Participar Agora
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Sponsored Giveaway Card -->
+                <div class="giveaway-card bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                    <div class="relative">
+                        <img src="https://via.placeholder.com/600x300" alt="Sorteio Patrocinado" class="w-full h-48 object-cover">
+                        <div class="absolute top-0 left-0 bg-orange-500 text-white px-4 py-1 rounded-br-lg">
+                            <span class="font-bold">PATROCINADO</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h2 class="text-2xl font-bold mb-2">Sorteio Patrocinado</h2>
+                        <p class="text-gray-400 mb-4">Participe deste sorteio exclusivo para inscritos com depósito no site parceiro.</p>
+                        <div class="flex items-center text-sm text-gray-400 mb-4">
+                            <i class="fas fa-gift text-yellow-400 mr-2"></i>
+                            <span>Prêmio: Skin de alto valor de CS:GO</span>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-400 mb-6">
+                            <i class="fas fa-users text-blue-400 mr-2"></i>
+                            <span>Participantes: 567</span>
+                        </div>
+                        <button onclick="openGiveawayModal('sponsored')" class="w-full csgo-orange hover:bg-orange-600 text-white py-3 rounded-md font-medium transition">
+                            Participar Agora
+                        </button>
+                    </div>
+                </div>
             </div>
-        </section>
-
-        <section id="videos" class="container">
-            <h2>ÚLTIMOS VÍDEOS</h2>
-            <div class="videos-grid">
-                <div class="video-item">
-                    <a href="#">
-                        <img src="placeholder-video-1.jpg" alt="Vídeo 1">
-                        <h3>Título do Vídeo 1</h3>
-                        <span class="video-duration">10:30</span>
-                    </a>
+            
+            <!-- Recent Winners Section -->
+            <div class="mt-16 max-w-5xl mx-auto">
+                <h2 class="text-3xl font-bold mb-8 text-center">Últimos Ganhadores</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-gray-700 rounded-lg p-4 shadow-lg text-center">
+                        <img src="https://via.placeholder.com/80" alt="Winner" class="h-20 w-20 rounded-full mx-auto mb-3">
+                        <h3 class="font-semibold">PlayerOne</h3>
+                        <p class="text-sm text-gray-400 mb-2">Ganhou em 15/06/2023</p>
+                        <div class="bg-gray-600 rounded-md p-2">
+                            <p class="text-yellow-400 font-medium">AK-47 | Asiimov</p>
+                            <p class="text-xs text-gray-300">Field-Tested</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-700 rounded-lg p-4 shadow-lg text-center">
+                        <img src="https://via.placeholder.com/80" alt="Winner" class="h-20 w-20 rounded-full mx-auto mb-3">
+                        <h3 class="font-semibold">TwitchViewer</h3>
+                        <p class="text-sm text-gray-400 mb-2">Ganhou em 14/06/2023</p>
+                        <div class="bg-gray-600 rounded-md p-2">
+                            <p class="text-yellow-400 font-medium">AWP | Dragon Lore</p>
+                            <p class="text-xs text-gray-300">Minimal Wear</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-700 rounded-lg p-4 shadow-lg text-center">
+                        <img src="https://via.placeholder.com/80" alt="Winner" class="h-20 w-20 rounded-full mx-auto mb-3">
+                        <h3 class="font-semibold">CSGOFan</h3>
+                        <p class="text-sm text-gray-400 mb-2">Ganhou em 13/06/2023</p>
+                        <div class="bg-gray-600 rounded-md p-2">
+                            <p class="text-yellow-400 font-medium">M4A4 | Howl</p>
+                            <p class="text-xs text-gray-300">Factory New</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-700 rounded-lg p-4 shadow-lg text-center">
+                        <img src="https://via.placeholder.com/80" alt="Winner" class="h-20 w-20 rounded-full mx-auto mb-3">
+                        <h3 class="font-semibold">SkinHunter</h3>
+                        <p class="text-sm text-gray-400 mb-2">Ganhou em 12/06/2023</p>
+                        <div class="bg-gray-600 rounded-md p-2">
+                            <p class="text-yellow-400 font-medium">Karambit | Fade</p>
+                            <p class="text-xs text-gray-300">Factory New</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="video-item">
-                    <a href="#">
-                        <img src="placeholder-video-2.jpg" alt="Vídeo 2">
-                        <h3>Título do Vídeo 2</h3>
-                        <span class="video-duration">15:45</span>
-                    </a>
-                </div>
-                <div class="video-item">
-                    <a href="#">
-                        <img src="placeholder-video-3.jpg" alt="Vídeo 3">
-                        <h3>Título do Vídeo 3</h3>
-                        <span class="video-duration">08:20</span>
-                    </a>
-                </div>
-                </div>
-            <div class="ver-mais">
-                <a href="#" class="button">VER MAIS VÍDEOS</a>
             </div>
-        </section>
-
-        <section id="links-uteis" class="container">
-            <h2>LINKS ÚTEIS</h2>
-            <ul>
-                <li><a href="#">CSGO.NET <i class="fas fa-external-link-alt"></i></a></li>
-                <li><a href="#">PROFIT HELPER (Extensão) <i class="fas fa-download"></i></a></li>
-                <li><a href="#">Comunidade Discord <i class="fab fa-discord"></i></a></li>
-            </ul>
-        </section>
+        </div>
     </main>
 
-    <footer>
-        <div class="container">
-            <div class="social-links">
-                <a href="#" target="_blank"><i class="fab fa-twitter"></i> Twitter</a>
-                <a href="#" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
-                <a href="#" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
+    <!-- Giveaway Modal -->
+    <div id="giveaway-modal" class="modal">
+        <div class="modal-content relative">
+            <span class="close-modal" onclick="closeGiveawayModal()">&times;</span>
+            
+            <div id="standard-giveaway-form" class="giveaway-form">
+                <h2 class="text-2xl font-bold mb-4">Formulário de Participação</h2>
+                <p class="text-gray-400 mb-6">Preencha os campos abaixo para participar do sorteio.</p>
+                
+                <form class="space-y-4">
+                    <div>
+                        <label for="modal-instagram" class="block mb-1">Instagram</label>
+                        <input type="text" id="modal-instagram" name="instagram" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="@seuinstagram" required>
+                    </div>
+                    <div>
+                        <label for="modal-discord" class="block mb-1">Discord</label>
+                        <input type="text" id="modal-discord" name="discord" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Usuario#1234" required>
+                    </div>
+                    <div>
+                        <label for="modal-tradelink" class="block mb-1">TradeLink da Steam</label>
+                        <input type="text" id="modal-tradelink" name="tradelink" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="https://steamcommunity.com/tradeoffer/new/?partner=..." required>
+                    </div>
+                    <div id="sponsored-fields" class="hidden space-y-4">
+                        <div>
+                            <label class="block mb-1">Comprovante de Depósito</label>
+                            <div class="file-upload flex items-center">
+                                <label class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded-md cursor-pointer transition">
+                                    <i class="fas fa-upload mr-2"></i>
+                                    Selecionar Arquivo
+                                    <input type="file" id="modal-deposit-proof" name="deposit-proof" accept="image/*" required>
+                                </label>
+                                <span id="modal-file-name" class="ml-3 text-gray-300">Nenhum arquivo selecionado</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="modal-is-subscribed" name="is-subscribed" class="w-4 h-4 text-purple-600 bg-gray-700 border-gray-600 rounded focus:ring-purple-500" required>
+                            <label for="modal-is-subscribed" class="ml-2 text-sm">Estou inscrito no canal da Twitch</label>
+                        </div>
+                    </div>
+                    <div class="pt-4">
+                        <button type="submit" class="w-full twitch-purple hover:bg-purple-700 text-white py-3 rounded-md font-medium transition">
+                            Confirmar Participação
+                        </button>
+                    </div>
+                </form>
             </div>
-            <p>&copy; 2025 Seu Site. Todos os direitos reservados.</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="gradient-bg text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center space-x-2">
+                        <img src="https://via.placeholder.com/40" alt="Logo" class="h-10 w-10 rounded-full">
+                        <span class="text-xl font-bold">FomyCup</span>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-300">Sorteios de skins CS:GO para a comunidade</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-purple-300 transition">
+                        <i class="fab fa-twitch text-xl"></i>
+                    </a>
+                    <a href="#" class="hover:text-purple-300 transition">
+                        <i class="fab fa-discord text-xl"></i>
+                    </a>
+                    <a href="#" class="hover:text-purple-300 transition">
+                        <i class="fab fa-instagram text-xl"></i>
+                    </a>
+                    <a href="#" class="hover:text-purple-300 transition">
+                        <i class="fab fa-steam text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-sm text-gray-400 text-center">
+                <p>© 2023 FomyCup. Todos os direitos reservados.</p>
+                <p class="mt-2">Este site não é afiliado à Valve Corporation ou à Twitch.</p>
+            </div>
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        // DOM elements
+        const loginButton = document.getElementById('login-button');
+        const userProfile = document.getElementById('user-profile');
+        const userAvatar = document.getElementById('user-avatar');
+        const username = document.getElementById('username');
+        const userPoints = document.getElementById('user-points');
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const giveawayModal = document.getElementById('giveaway-modal');
+        const sponsoredFields = document.getElementById('sponsored-fields');
+        const modalDepositProof = document.getElementById('modal-deposit-proof');
+        const modalFileName = document.getElementById('modal-file-name');
+
+        // User state
+        let isLoggedIn = false;
+        let currentUser = null;
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            checkLoginStatus();
+        });
+
+        function setupEventListeners() {
+            // Mobile menu toggle
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // File upload display
+            modalDepositProof.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    modalFileName.textContent = e.target.files[0].name;
+                } else {
+                    modalFileName.textContent = 'Nenhum arquivo selecionado';
+                }
+            });
+        }
+
+        function checkLoginStatus() {
+            // In a real app, this would check cookies/localStorage for a valid session
+            const mockLoggedIn = false; // Change to true to simulate logged in state
+            
+            if (mockLoggedIn) {
+                // Simulate a logged in user
+                currentUser = {
+                    id: '12345',
+                    displayName: 'MockUser',
+                    avatar: 'https://via.placeholder.com/150',
+                    points: 7500
+                };
+                updateUserDisplay();
+            }
+        }
+
+        function twitchLogin() {
+            // In a real app, this would redirect to Twitch OAuth
+            // For demo purposes, we'll simulate a successful login
+            currentUser = {
+                id: '67890',
+                displayName: 'TwitchUser',
+                avatar: 'https://via.placeholder.com/150',
+                points: 3500
+            };
+            isLoggedIn = true;
+            updateUserDisplay();
+        }
+
+        function logout() {
+            isLoggedIn = false;
+            currentUser = null;
+            loginButton.classList.remove('hidden');
+            userProfile.classList.add('hidden');
+        }
+
+        function updateUserDisplay() {
+            if (isLoggedIn && currentUser) {
+                loginButton.classList.add('hidden');
+                userProfile.classList.remove('hidden');
+                
+                userAvatar.src = currentUser.avatar;
+                username.textContent = currentUser.displayName;
+                userPoints.textContent = currentUser.points + ' pts';
+            }
+        }
+
+        function openGiveawayModal(type) {
+            if (!isLoggedIn) {
+                alert('Por favor, faça login com sua conta Twitch para participar.');
+                return;
+            }
+            
+            if (type === 'sponsored') {
+                sponsoredFields.classList.remove('hidden');
+            } else {
+                sponsoredFields.classList.add('hidden');
+            }
+            
+            giveawayModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeGiveawayModal() {
+            giveawayModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            // Reset form
+            document.querySelector('.giveaway-form form').reset();
+            sponsoredFields.classList.add('hidden');
+            modalFileName.textContent = 'Nenhum arquivo selecionado';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target === giveawayModal) {
+                closeGiveawayModal();
+            }
+        }
+    </script>
 </body>
 </html>
